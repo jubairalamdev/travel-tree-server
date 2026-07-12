@@ -61,9 +61,9 @@
 ## Phase 4: Read Endpoints
 
 ### 4.1 GET /api/tours — Fetch all tours
-- [ ] `app.get('/api/tours', ...)`
-- [ ] `toursCollection.find().toArray()`
-- [ ] Respond with `{ success: true, data: tours }`
+- [X] `app.get('/api/tours', ...)`
+- [X] `toursCollection.find().toArray()`
+- [X] Respond with `{ success: true, data: tours }`
 
 ### 4.2 GET /api/tours/:id — Fetch single tour
 - [ ] `app.get('/api/tours/:id', ...)`
