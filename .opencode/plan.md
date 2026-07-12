@@ -66,11 +66,11 @@
 - [X] Respond with `{ success: true, data: tours }`
 
 ### 4.2 GET /api/tours/:id — Fetch single tour
-- [ ] `app.get('/api/tours/:id', ...)`
-- [ ] Convert `req.params.id` to `ObjectId`
-- [ ] `toursCollection.findOne({ _id: new ObjectId(id) })`
-- [ ] 404 if not found: `{ success: false, message: "Tour not found" }`
-- [ ] 200 with data: `{ success: true, data: tour }`
+- [X] `app.get('/api/tours/:id', ...)`
+- [X] Convert `req.params.id` to `ObjectId`
+- [X] `toursCollection.findOne({ _id: new ObjectId(id) })`
+- [X] 404 if not found: `{ success: false, message: "Tour not found" }`
+- [X] 200 with data: `{ success: true, data: tour }`
 
 ---
 

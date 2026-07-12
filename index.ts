@@ -34,6 +34,17 @@ async function run() {
       res.send({ success: true, data: tours });
     });
 
+    app.get('/api/tours/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const tour = await toursCollection.findOne(query);
+      if (!tour) {
+        res.status(404).send({ success: false, message: "Tour not found" });
+        return;
+      }
+      res.send({ success: true, data: tour });
+    });
+
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
