@@ -24,37 +24,37 @@
 ## Phase 2: Entry Point — DNS, Imports & App Setup
 
 ### 2.1 Create `index.ts` — DNS & imports
-- [ ] DNS fix: `require("node:dns").setServers(['8.8.8.8', '8.8.4.4'])`
-- [ ] TypeScript imports: `express`, `cors`, `MongoClient`, `ServerApiVersion`, `ObjectId` from `mongodb`
-- [ ] Load `dotenv/config`
+- [X] DNS fix: `import dns from "node:dns"; dns.setServers(['8.8.8.8', '8.8.4.4'])`
+- [X] TypeScript imports: `express`, `cors`, `MongoClient`, `ServerApiVersion`, `ObjectId` from `mongodb`
+- [X] Load `dotenv/config`
 
 ### 2.2 App initialization & middleware
-- [ ] Create Express app, define `port`
-- [ ] `app.use(cors())` with origin `http://localhost:3000`, credentials: true
-- [ ] `app.use(express.json())`
-- [ ] Root health-check route: `GET /` → `"Travel Tree server is running"`
-- [ ] `app.listen(port, ...)`
+- [X] Create Express app, define `port`
+- [X] `app.use(cors())` with origin `http://localhost:3000`, credentials: true
+- [X] `app.use(express.json())`
+- [X] Root health-check route: `GET /` → `"Travel Tree server is running"`
+- [X] `app.listen(port, ...)`
 
 ---
 
 ## Phase 3: MongoDB Connection
 
 ### 3.1 Configure MongoClient
-- [ ] Read `MONGODB_URI` from env
-- [ ] Create `MongoClient` with `ServerApiVersion.v1`, strict: true
+- [X] Read `MONGODB_URI` from env
+- [X] Create `MongoClient` with `ServerApiVersion.v1`, strict: true
 
 ### 3.2 Implement `run()` function
-- [ ] Define `async function run()`
-- [ ] `await client.connect()`
-- [ ] `const db = client.db("travel_tree")` (or from env)
-- [ ] `const toursCollection = db.collection("tours")`
-- [ ] Ping `admin` database to verify connection
-- [ ] Log success message on connection
-- [ ] `finally` block with `client.close()` commented
-- [ ] `run().catch(console.dir)`
+- [X] Define `async function run()`
+- [X] `await client.connect()`
+- [X] `const db = client.db("travel-tree")` (or from env)
+- [X] `const toursCollection = db.collection("tours")`
+- [X] Ping `admin` database to verify connection
+- [X] Log success message on connection
+- [X] `finally` block with `client.close()` commented
+- [X] `run().catch(console.dir)`
 
 ### 3.3 Place all route handlers inside `run()`
-- [ ] All route handlers go **inside** `run()` after collection definition so they have access to `toursCollection`
+- [X] All route handlers go **inside** `run()` after collection definition so they have access to `toursCollection`
 
 ---
 
