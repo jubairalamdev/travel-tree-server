@@ -25,7 +25,7 @@ async function run() {
   try {
     await client.connect();
 
-    const db = client.db("travel-tree");
+    const db = client.db("travel_tree");
     const toursCollection = db.collection("tours");
 
     app.get('/api/tours', async (req, res) => {
