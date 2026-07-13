@@ -69,6 +69,43 @@ async function run() {
       res.status(201).send({ success: true, message: "Tour created successfully", data: createdTour });
     });
 
+    app.get('/api/tours/stats/daily-creation', async (req, res) => {
+      const userId = req.query.userId as string;
+
+      if (!userId) {
+        res.status(400).send({ success: false, message: "userId query parameter is required" });
+        return;
+      }
+
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      sevenDaysAgo.setHours(0, 0, 0, 0);
+      const startDate = sevenDaysAgo.toISOString();
+
+      const pipeline = [
+        { $match: { createdBy: userId, createdAt: { $gte: startDate } } },
+        { $group: { _id: { $substr: ['$createdAt', 0, 10] }, count: { $sum: 1 } } },
+        { $sort: { _id: 1 } },
+      ];
+
+      const results = await toursCollection.aggregate(pipeline).toArray();
+
+      const dateMap: Record<string, number> = {};
+      for (const r of results) {
+        dateMap[r._id] = r.count;
+      }
+
+      const data: { date: string; count: number }[] = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        data.push({ date: key, count: dateMap[key] || 0 });
+      }
+
+      res.send({ success: true, data });
+    });
+
     app.get('/api/tours/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };

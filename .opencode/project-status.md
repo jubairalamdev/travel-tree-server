@@ -25,6 +25,7 @@
 | 5.1 | POST /api/tours — create with inline validation (201) | ✅ |
 | 5.2 | PATCH /api/tours/:id — partial update | ✅ |
 | 5.3 | DELETE /api/tours/:id — delete | ✅ |
+| 5.4 | GET /api/tours/stats/daily-creation — aggregation stats | ✅ |
 
 ### Remaining (Next Session Starts Here)
 

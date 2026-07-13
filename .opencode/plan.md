@@ -102,6 +102,13 @@
 - [x] Check `deletedCount` — 404 if none deleted
 - [x] Response: `{ success: true, message: "Tour deleted successfully" }`
 
+### 5.4 GET /api/tours/stats/daily-creation — Daily tour creation stats
+- [x] `app.get('/api/tours/stats/daily-creation', ...)`
+- [x] Require `userId` query param (400 if missing)
+- [x] Aggregation pipeline: `$match` by userId + last 7 days, `$group` by date, `$sort` ascending
+- [x] Fill missing days with 0 count
+- [x] Response: `{ success: true, data: [{ date: "2026-07-07", count: 3 }, ...] }`
+
 ---
 
 ## Phase 6: Error Handling & Response Consistency
