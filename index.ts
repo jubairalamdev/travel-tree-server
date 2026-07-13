@@ -107,6 +107,20 @@ async function run() {
       res.send({ success: true, message: "Tour updated successfully", data: updatedTour });
     });
 
+    app.delete('/api/tours/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+
+      const result = await toursCollection.deleteOne(filter);
+
+      if (result.deletedCount === 0) {
+        res.status(404).send({ success: false, message: "Tour not found" });
+        return;
+      }
+
+      res.send({ success: true, message: "Tour deleted successfully" });
+    });
+
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
