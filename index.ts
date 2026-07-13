@@ -52,12 +52,16 @@ async function run() {
         duration,
         imageUrl,
         rating: req.body.rating || 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       if (req.body.originalPrice !== undefined) {
         newTour.originalPrice = req.body.originalPrice;
+      }
+
+      if (req.body.createdBy) {
+        newTour.createdBy = req.body.createdBy;
       }
 
       const result = await toursCollection.insertOne(newTour);
@@ -94,7 +98,7 @@ async function run() {
         return;
       }
 
-      updateData.updatedAt = new Date();
+      updateData.updatedAt = new Date().toISOString();
 
       const result = await toursCollection.updateOne(filter, { $set: updateData });
 
