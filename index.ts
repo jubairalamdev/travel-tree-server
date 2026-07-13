@@ -76,6 +76,37 @@ async function run() {
       res.send({ success: true, data: tour });
     });
 
+    app.patch('/api/tours/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+
+      const updateData: Record<string, any> = {};
+      const allowedFields = ['title', 'shortDescription', 'fullDescription', 'price', 'originalPrice', 'location', 'category', 'duration', 'rating', 'imageUrl'];
+
+      for (const field of allowedFields) {
+        if (req.body[field] !== undefined) {
+          updateData[field] = req.body[field];
+        }
+      }
+
+      if (Object.keys(updateData).length === 0) {
+        res.status(400).send({ success: false, message: "No valid fields to update" });
+        return;
+      }
+
+      updateData.updatedAt = new Date();
+
+      const result = await toursCollection.updateOne(filter, { $set: updateData });
+
+      if (result.matchedCount === 0) {
+        res.status(404).send({ success: false, message: "Tour not found" });
+        return;
+      }
+
+      const updatedTour = await toursCollection.findOne(filter);
+      res.send({ success: true, message: "Tour updated successfully", data: updatedTour });
+    });
+
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
