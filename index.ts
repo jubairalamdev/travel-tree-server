@@ -34,6 +34,37 @@ async function run() {
       res.send({ success: true, data: tours });
     });
 
+    app.post('/api/tours', async (req, res) => {
+      const { title, shortDescription, fullDescription, price, location, category, duration, imageUrl } = req.body;
+
+      if (!title || !shortDescription || !fullDescription || !price || !location || !category || !duration || !imageUrl) {
+        res.status(400).send({ success: false, message: "Missing required fields" });
+        return;
+      }
+
+      const newTour: any = {
+        title,
+        shortDescription,
+        fullDescription,
+        price,
+        location,
+        category,
+        duration,
+        imageUrl,
+        rating: req.body.rating || 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      if (req.body.originalPrice !== undefined) {
+        newTour.originalPrice = req.body.originalPrice;
+      }
+
+      const result = await toursCollection.insertOne(newTour);
+      const createdTour = await toursCollection.findOne({ _id: result.insertedId });
+      res.status(201).send({ success: true, message: "Tour created successfully", data: createdTour });
+    });
+
     app.get('/api/tours/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };

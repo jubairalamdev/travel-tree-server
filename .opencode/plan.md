@@ -77,13 +77,13 @@
 ## Phase 5: Write Endpoints
 
 ### 5.1 POST /api/tours — Create a tour
-- [ ] `app.post('/api/tours', ...)`
-- [ ] Inline validation: check required fields (title, shortDescription, fullDescription, price, location, category, duration, imageUrl)
-- [ ] 400 if missing: `{ success: false, message: "Missing required fields" }`
-- [ ] Auto-set `createdAt`, `updatedAt`
-- [ ] `toursCollection.insertOne(newTour)`
-- [ ] Set `rating` default to 0 if not provided
-- [ ] 201 response: `{ success: true, message: "Tour created successfully", data: createdTour }`
+- [X] `app.post('/api/tours', ...)`
+- [X] Inline validation: check required fields (title, shortDescription, fullDescription, price, location, category, duration, imageUrl)
+- [X] 400 if missing: `{ success: false, message: "Missing required fields" }`
+- [X] Auto-set `createdAt`, `updatedAt`
+- [X] `toursCollection.insertOne(newTour)`
+- [X] Set `rating` default to 0 if not provided
+- [X] 201 response: `{ success: true, message: "Tour created successfully", data: createdTour }`
 
 ### 5.2 PATCH /api/tours/:id — Update a tour
 - [ ] `app.patch('/api/tours/:id', ...)`
