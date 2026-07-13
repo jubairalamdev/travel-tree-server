@@ -77,7 +77,7 @@
 ## Phase 5: Write Endpoints
 
 ### 5.1 POST /api/tours — Create a tour
-- [X] `app.post('/api/tours', ...)`
+- [x] `app.post('/api/tours', ...)`
 - [X] Inline validation: check required fields (title, shortDescription, fullDescription, price, location, category, duration, imageUrl)
 - [X] 400 if missing: `{ success: false, message: "Missing required fields" }`
 - [X] Auto-set `createdAt`, `updatedAt`
@@ -86,21 +86,21 @@
 - [X] 201 response: `{ success: true, message: "Tour created successfully", data: createdTour }`
 
 ### 5.2 PATCH /api/tours/:id — Update a tour
-- [ ] `app.patch('/api/tours/:id', ...)`
-- [ ] Convert id to ObjectId
-- [ ] Build `$set` object from `req.body` (only provide fields that are sent)
-- [ ] Auto-update `updatedAt`
-- [ ] `toursCollection.updateOne(filter, { $set: updateData })`
-- [ ] Check `modifiedCount` — 404 if no document matched
-- [ ] Respond with updated document via `findOne`
-- [ ] Response: `{ success: true, message: "Tour updated successfully", data: tour }`
+- [x] `app.patch('/api/tours/:id', ...)`
+- [x] Convert id to ObjectId
+- [x] Build `$set` object from `req.body` (only provide fields that are sent)
+- [x] Auto-update `updatedAt`
+- [x] `toursCollection.updateOne(filter, { $set: updateData })`
+- [x] Check `modifiedCount` — 404 if no document matched
+- [x] Respond with updated document via `findOne`
+- [x] Response: `{ success: true, message: "Tour updated successfully", data: tour }`
 
 ### 5.3 DELETE /api/tours/:id — Delete a tour
-- [ ] `app.delete('/api/tours/:id', ...)`
-- [ ] Convert id to ObjectId
-- [ ] `toursCollection.deleteOne({ _id: new ObjectId(id) })`
-- [ ] Check `deletedCount` — 404 if none deleted
-- [ ] Response: `{ success: true, message: "Tour deleted successfully" }`
+- [x] `app.delete('/api/tours/:id', ...)`
+- [x] Convert id to ObjectId
+- [x] `toursCollection.deleteOne({ _id: new ObjectId(id) })`
+- [x] Check `deletedCount` — 404 if none deleted
+- [x] Response: `{ success: true, message: "Tour deleted successfully" }`
 
 ---
 

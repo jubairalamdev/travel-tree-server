@@ -18,18 +18,21 @@
 | 4.1 | GET /api/tours — fetch all tours | ✅ |
 | 4.2 | GET /api/tours/:id — fetch single tour with 404 | ✅ |
 
+### Completed
+
+| Phase | Task | Status |
+|-------|------|--------|
+| 5.1 | POST /api/tours — create with inline validation (201) | ✅ |
+| 5.2 | PATCH /api/tours/:id — partial update | ✅ |
+| 5.3 | DELETE /api/tours/:id — delete | ✅ |
+
 ### Remaining (Next Session Starts Here)
 
 | Phase | Task |
 |-------|------|
-| 5.1 | POST /api/tours — create with inline validation (201) |
-| 5.2 | PATCH /api/tours/:id — partial update |
-| 5.3 | DELETE /api/tours/:id — delete |
-| 6.1 | try/catch wrappers on all routes |
-| 6.2 | Verify response shape consistency |
-| 7.1 | Dev server smoke test |
-| 7.2 | `npm run build` check |
-| 7.3 | Endpoint verification (curl) |
+| 6.x | Error handling — deferred (will add try/catch at the end) |
+| 6.x | Error handling — deferred (will add try/catch at the end) |
+| 7.x | Verification (build, curl tests) |
 
 ### Key Technical Details
 
