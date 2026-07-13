@@ -17,11 +17,6 @@
 | 3.3 | Route handlers placed inside run() | ✅ |
 | 4.1 | GET /api/tours — fetch all tours | ✅ |
 | 4.2 | GET /api/tours/:id — fetch single tour with 404 | ✅ |
-
-### Completed
-
-| Phase | Task | Status |
-|-------|------|--------|
 | 5.1 | POST /api/tours — create with inline validation (201) | ✅ |
 | 5.2 | PATCH /api/tours/:id — partial update | ✅ |
 | 5.3 | DELETE /api/tours/:id — delete | ✅ |
@@ -32,12 +27,21 @@
 | Phase | Task |
 |-------|------|
 | 6.x | Error handling — deferred (will add try/catch at the end) |
-| 6.x | Error handling — deferred (will add try/catch at the end) |
-| 7.x | Verification (build, curl tests) |
+| 7.x | Verification (build, curl endpoint tests) |
+
+### Completed Work Summary
+
+**Current session additions:**
+- `PATCH /api/tours/:id` — partial update with whitelisted fields, auto-updates `updatedAt`, 404 handling
+- `DELETE /api/tours/:id` — delete with `deletedCount` check, 404 handling
+- `GET /api/tours/stats/daily-creation?userId=xxx` — aggregation pipeline: $match by user + 7 days, $group by date, fills missing days with 0
+- POST now accepts and stores `createdBy` from request body
+- `createdAt` / `updatedAt` stored as ISO strings (`new Date().toISOString()`) instead of Date objects
+- Route order fixed: stats endpoint placed before `/:id` to avoid Express route conflicts
 
 ### Key Technical Details
 
-- **Runtime:** `npx tsx index.ts` (not ts-node — tsx is used due to compatibility)
+- **Runtime:** `npx tsx index.ts` (tsx used for compatibility)
 - **Dev:** `npm run dev` → `nodemon --exec tsx index.ts`
 - **Build:** `npm run build` → `tsc`
 - **DB:** MongoDB Atlas, native driver, `travel_tree` database, `tours` collection
@@ -45,17 +49,12 @@
 - **Response format:** `{ success: boolean, data?: any, message?: string }`
 - **Update method:** PATCH (not PUT)
 
-### Files to Read on Restart
-
-1. `.opencode/plan.md` — full phased plan with completed markers
-2. `.opencode/AGENTS.md` — conventions, commands, style guide
-3. `.opencode/project-status.md` — this file
-4. `index.ts` — the entire server (~68 lines)
-5. `Backend PRD.md` — original requirements
-
 ### Git Log
 
 ```
+c221d5d feat: add DELETE /api/tours/:id endpoint for tour deletion
+21bd9a1 feat: add PATCH /api/tours/:id endpoint for partial tour updates
+7f90b0a feat: add POST /api/tours endpoint with inline validation
 9159f52 Get single tour by id API created.
 f41aa1f fixed All tours API
 d4128f1 Created API for getting all the available tours.
