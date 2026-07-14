@@ -6,6 +6,10 @@ import cors from 'cors';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import dotenv from 'dotenv';
 
+interface AuthRequest extends express.Request {
+  userId?: string;
+}
+
 dotenv.config();
 
 const app = express();
@@ -36,6 +40,35 @@ async function run() {
 
     const db = client.db("travel_tree");
     const toursCollection = db.collection("tours");
+    const sessionsCollection = db.collection("session");
+    const usersCollection = db.collection("user");
+
+    async function verifyToken(req: AuthRequest, res: any, next: any) {
+      try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return res.status(401).send({ success: false, message: "No token provided" });
+        }
+
+        const token = authHeader.split(' ')[1];
+        const session = await sessionsCollection.findOne({ token });
+
+        if (!session) {
+          return res.status(403).send({ success: false, message: "Invalid session" });
+        }
+
+        const user = await usersCollection.findOne({ _id: new ObjectId(session.userId) });
+        if (!user) {
+          return res.status(403).send({ success: false, message: "User not found" });
+        }
+
+        req.userId = session.userId;
+        next();
+      } catch (err) {
+        console.error("Auth error:", err);
+        return res.status(500).send({ success: false, message: "Authentication failed" });
+      }
+    }
 
     app.get('/api/tours', async (req, res) => {
       try {
@@ -48,7 +81,7 @@ async function run() {
       }
     });
 
-    app.post('/api/tours', async (req, res) => {
+    app.post('/api/tours', verifyToken, async (req, res) => {
       try {
         const { title, shortDescription, fullDescription, price, location, category, duration, imageUrl } = req.body;
 
@@ -67,16 +100,13 @@ async function run() {
           duration,
           imageUrl,
           rating: req.body.rating || 0,
+          createdBy: (req as AuthRequest).userId,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
 
         if (req.body.originalPrice !== undefined) {
           newTour.originalPrice = req.body.originalPrice;
-        }
-
-        if (req.body.createdBy) {
-          newTour.createdBy = req.body.createdBy;
         }
 
         const result = await toursCollection.insertOne(newTour);
@@ -88,22 +118,15 @@ async function run() {
       }
     });
 
-    app.get('/api/tours/stats/daily-creation', async (req, res) => {
+    app.get('/api/tours/stats/daily-creation', verifyToken, async (req, res) => {
       try {
-        const userId = req.query.userId as string;
-
-        if (!userId) {
-          res.status(400).send({ success: false, message: "userId query parameter is required" });
-          return;
-        }
-
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
         sevenDaysAgo.setHours(0, 0, 0, 0);
         const startDate = sevenDaysAgo.toISOString();
 
         const pipeline = [
-          { $match: { createdBy: userId, createdAt: { $gte: startDate } } },
+          { $match: { createdBy: (req as AuthRequest).userId, createdAt: { $gte: startDate } } },
           { $group: { _id: { $substr: ['$createdAt', 0, 10] }, count: { $sum: 1 } } },
           { $sort: { _id: 1 } },
         ];
@@ -132,7 +155,7 @@ async function run() {
 
     app.get('/api/tours/:id', async (req, res) => {
       try {
-        const id = req.params.id;
+        const id = req.params.id as string;
         const query = { _id: toObjectId(id) };
         const tour = await toursCollection.findOne(query);
         if (!tour) {
@@ -150,9 +173,9 @@ async function run() {
       }
     });
 
-    app.patch('/api/tours/:id', async (req, res) => {
+    app.patch('/api/tours/:id', verifyToken, async (req, res) => {
       try {
-        const id = req.params.id;
+        const id = req.params.id as string;
         const filter = { _id: toObjectId(id) };
 
         const updateData: Record<string, any> = {};
@@ -190,9 +213,9 @@ async function run() {
       }
     });
 
-    app.delete('/api/tours/:id', async (req, res) => {
+    app.delete('/api/tours/:id', verifyToken, async (req, res) => {
       try {
-        const id = req.params.id;
+        const id = req.params.id as string;
         const filter = { _id: toObjectId(id) };
 
         const result = await toursCollection.deleteOne(filter);
