@@ -22,12 +22,25 @@
 | 5.3 | DELETE /api/tours/:id — delete | ✅ |
 | 5.4 | GET /api/tours/stats/daily-creation — aggregation stats | ✅ |
 
+### Completed This Session
+
+| Phase | Task |
+|-------|------|
+| 6.1 | Try/catch on all 7 route handlers, error logging, ObjectId helper |
+| 6.2 | Response shape verified: all have `success`, data/message consistent |
+| 7.1 | Dev server smoke test — verified |
+| 7.2 | Build check — `tsc` produces `dist/index.js` with 0 errors |
+
+**Additional fixes:**
+- CORS origin now configurable via `CORS_ORIGIN` env var (defaults to `http://localhost:3000`)
+- Added `toObjectId()` helper for graceful ObjectId cast error handling → 400
+- Added `CORS_ORIGIN` to `.env`
+
 ### Remaining (Next Session Starts Here)
 
 | Phase | Task |
 |-------|------|
-| 6.x | Error handling — deferred (will add try/catch at the end) |
-| 7.x | Verification (build, curl endpoint tests) |
+| 7.3 | Endpoint verification with curl (manual testing) |
 
 ### Completed Work Summary
 

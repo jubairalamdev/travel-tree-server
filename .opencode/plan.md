@@ -114,28 +114,28 @@
 ## Phase 6: Error Handling & Response Consistency
 
 ### 6.1 Try/catch on all routes
-- [ ] Wrap every route handler in try/catch
-- [ ] Log errors server-side with `console.error`
-- [ ] Validation errors → 400
-- [ ] Server errors → 500: `{ success: false, message: "Internal server error" }`
-- [ ] ObjectId cast errors caught gracefully → 400
+- [x] Wrap every route handler in try/catch
+- [x] Log errors server-side with `console.error`
+- [x] Validation errors → 400
+- [x] Server errors → 500: `{ success: false, message: "Internal server error" }`
+- [x] ObjectId cast errors caught gracefully → 400
 
 ### 6.2 (Review) Verify all response shapes match PRD spec
-- [ ] Every response has `success` boolean
-- [ ] Success responses have `data` and optional `message`
-- [ ] Error responses have `message`
+- [x] Every response has `success` boolean
+- [x] Success responses have `data` and optional `message`
+- [x] Error responses have `message`
 
 ---
 
 ## Phase 7: Verification
 
 ### 7.1 Dev server smoke test
-- [ ] `npm run dev` starts without errors
-- [ ] Console logs "Pinged your deployment" on connect
-- [ ] `GET /` returns health check text
+- [x] `npm run dev` starts without errors
+- [x] Console logs "Pinged your deployment" on connect
+- [x] `GET /` returns health check text
 
 ### 7.2 Build check
-- [ ] `npm run build` produces `dist/index.js` with no TS errors
+- [x] `npm run build` produces `dist/index.js` with no TS errors
 
 ### 7.3 Endpoint verification (curl or manual)
 - [ ] Create a tour (POST) → 201
