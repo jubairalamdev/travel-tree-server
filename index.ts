@@ -1,6 +1,7 @@
 import dns from "node:dns";
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
+import crypto from 'node:crypto';
 import express from 'express';
 import cors from 'cors';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
@@ -50,9 +51,21 @@ async function run() {
           return res.status(401).send({ success: false, message: "No token provided" });
         }
 
-        const token = authHeader.split(' ')[1];
-        const session = await sessionsCollection.findOne({ token });
+        const signedToken = authHeader.split(' ')[1];
+        const parts = signedToken.split('.');
+        if (parts.length !== 2) {
+          return res.status(403).send({ success: false, message: "Invalid token format" });
+        }
 
+        const rawToken = parts[0];
+        const signature = parts[1];
+        const expectedSig = crypto.createHmac('sha256', process.env.BETTER_AUTH_SECRET || '').update(rawToken).digest('base64url');
+
+        if (expectedSig !== signature) {
+          return res.status(403).send({ success: false, message: "Invalid token signature" });
+        }
+
+        const session = await sessionsCollection.findOne({ token: rawToken });
         if (!session) {
           return res.status(403).send({ success: false, message: "Invalid session" });
         }
