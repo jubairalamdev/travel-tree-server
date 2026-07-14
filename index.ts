@@ -127,7 +127,7 @@ async function run() {
 
         const pipeline = [
           { $match: { createdBy: (req as AuthRequest).userId, createdAt: { $gte: startDate } } },
-          { $group: { _id: { $substr: ['$createdAt', 0, 10] }, count: { $sum: 1 } } },
+          { $group: { _id: { $substrCP: ['$createdAt', 0, 10] }, count: { $sum: 1 } } },
           { $sort: { _id: 1 } },
         ];
 
