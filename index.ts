@@ -120,13 +120,13 @@ app.get('/', (req, res) => {
   res.send('Travel Tree server is running');
 });
 
-app.get('/api/tours', withDb(async (req, res) => {
+app.get('/tours', withDb(async (req, res) => {
   const db = await getDb();
   const tours = await db.collection("tours").find().toArray();
   res.send({ success: true, data: tours });
 }));
 
-app.get('/api/tours/stats/daily-creation', withDb(async (req, res) => {
+app.get('/tours/stats/daily-creation', withDb(async (req, res) => {
   const userId = req.query.userId as string;
   if (!userId) {
     res.status(400).send({ success: false, message: "userId query parameter is required" });
@@ -163,7 +163,7 @@ app.get('/api/tours/stats/daily-creation', withDb(async (req, res) => {
   res.send({ success: true, data });
 }));
 
-app.get('/api/tours/:id', withDb(async (req, res) => {
+app.get('/tours/:id', withDb(async (req, res) => {
   const id = req.params.id as string;
   const query = { _id: toObjectId(id) };
   const db = await getDb();
@@ -175,7 +175,7 @@ app.get('/api/tours/:id', withDb(async (req, res) => {
   res.send({ success: true, data: tour });
 }));
 
-app.post('/api/tours', verifyToken, withDb(async (req, res) => {
+app.post('/tours', verifyToken, withDb(async (req, res) => {
   const { title, shortDescription, fullDescription, price, location, category, duration, imageUrl } = req.body;
 
   if (!title || !shortDescription || !fullDescription || !price || !location || !category || !duration || !imageUrl) {
@@ -208,7 +208,7 @@ app.post('/api/tours', verifyToken, withDb(async (req, res) => {
   res.status(201).send({ success: true, message: "Tour created successfully", data: createdTour });
 }));
 
-app.patch('/api/tours/:id', verifyToken, withDb(async (req, res) => {
+app.patch('/tours/:id', verifyToken, withDb(async (req, res) => {
   const id = req.params.id as string;
   const filter = { _id: toObjectId(id) };
 
@@ -240,7 +240,7 @@ app.patch('/api/tours/:id', verifyToken, withDb(async (req, res) => {
   res.send({ success: true, message: "Tour updated successfully", data: updatedTour });
 }));
 
-app.delete('/api/tours/:id', verifyToken, withDb(async (req, res) => {
+app.delete('/tours/:id', verifyToken, withDb(async (req, res) => {
   const id = req.params.id as string;
   const filter = { _id: toObjectId(id) };
 
