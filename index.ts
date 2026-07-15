@@ -1,7 +1,6 @@
 import dns from "node:dns";
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
-import crypto from 'node:crypto';
 import express from 'express';
 import cors from 'cors';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
@@ -51,7 +50,7 @@ interface AuthRequest extends express.Request {
   userId?: string;
 }
 
-// Middleware: verify HMAC-signed auth token
+// Middleware: verify Better Auth session token
 async function verifyToken(req: AuthRequest, res: express.Response, next: express.NextFunction) {
   try {
     const authHeader = req.headers.authorization;
@@ -60,24 +59,10 @@ async function verifyToken(req: AuthRequest, res: express.Response, next: expres
       return;
     }
 
-    const signedToken = authHeader.split(' ')[1];
-    const parts = signedToken.split('.');
-    if (parts.length !== 2) {
-      res.status(403).send({ success: false, message: "Invalid token format" });
-      return;
-    }
-
-    const rawToken = parts[0];
-    const signature = parts[1];
-    const expectedSig = crypto.createHmac('sha256', process.env.BETTER_AUTH_SECRET || '').update(rawToken).digest('base64url');
-
-    if (expectedSig !== signature) {
-      res.status(403).send({ success: false, message: "Invalid token signature" });
-      return;
-    }
+    const token = authHeader.split(' ')[1];
 
     const db = await getDb();
-    const session = await db.collection("session").findOne({ token: rawToken });
+    const session = await db.collection("session").findOne({ token });
     if (!session) {
       res.status(403).send({ success: false, message: "Invalid session" });
       return;
